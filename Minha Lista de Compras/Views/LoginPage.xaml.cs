@@ -33,8 +33,10 @@ namespace Minha_Lista_de_Compras.Views
 
 
             Image logo = new Image();
-            logo.Source = "drawable/For Sale.png";
-            logo.Margin = new Thickness(40, 10, 40, 0);
+            logo.Source = "drawable/ForSale.png";
+          
+            logo.Aspect = Aspect.AspectFit;
+            logo.Margin = new Thickness(90, 10, 90, 0);
 
             Label labelUsuario = new Label();
             labelUsuario.Text = "Usuario";
@@ -169,7 +171,7 @@ namespace Minha_Lista_de_Compras.Views
                 await Device.InvokeOnMainThreadAsync(async () =>
                 {
                     await Navigation.PopAsync(true);
-                   // await Navigation.PushAsync(new Home());
+                    //await Navigation.PushAsync(new Home());
 
                 });
             }

@@ -15,7 +15,6 @@ namespace Minha_Lista_de_Compras.Views
     public partial class Cadastro : ContentPage
     {
         Entry cpf_input = new Entry();
-        Entry Login = new Entry();
         Entry Password = new Entry();
         Entry Password2 = new Entry();
         Entry Email = new Entry();
@@ -38,9 +37,6 @@ namespace Minha_Lista_de_Compras.Views
 
 
 
-            Label labelUsuario = new Label();
-            labelUsuario.Text = "Usuario";
-            labelUsuario.Margin = new Thickness(10, 0);
 
             Label labelPassword = new Label();
             labelPassword.Text = "Senha";
@@ -65,9 +61,6 @@ namespace Minha_Lista_de_Compras.Views
             Password2.BackgroundColor = Color.White;
             Password2.Margin = new Thickness(10, 0);
 
-            Login.BackgroundColor = Color.White;
-            Login.Margin = new Thickness(10, 0);
-
             Email.BackgroundColor = Color.White;
             Email.Margin = new Thickness(10, 0);
 
@@ -87,8 +80,6 @@ namespace Minha_Lista_de_Compras.Views
                     cpf_input,
                     labelEmail,
                     Email,
-                    labelUsuario,
-                    Login,
                     labelPassword,
                     Password,
                     labelPassword2,
@@ -142,22 +133,40 @@ namespace Minha_Lista_de_Compras.Views
 
             try
             {
-                var person = await "https://barber-auth.herokuapp.com/api/register"
+               var cadastroReques =  await "https://barber-auth.herokuapp.com/api/register/"
                    .PostJsonAsync(new
                    {
-                       username = Login.Text,
+                       username = cpf_input.Text,
                        password = Password.Text,
                        password2 = Password2.Text,
                        email = Email.Text,
+                       first_name = "",
+                       last_name = ""
                    })
-                    .ReceiveJson<string>();
+                   ;
 
-                await Navigation.PopModalAsync(true);
+                if (cadastroReques.StatusCode == 200 || cadastroReques.StatusCode == 201)
+                    CadastroButton.BackgroundColor = Color.Green;
+                else if (cadastroReques.StatusCode == 400 || cadastroReques.StatusCode == 401) {
+
+                    CadastroButton.BackgroundColor = Color.Yellow;
+
+                    msg_error.Text = "Confira todos os campos.";
+                }
+                    
+                else {
+
+                    msg_error.Text = await cadastroReques.GetStringAsync();
+
+                }
+
+
             }
-            catch
+            catch(Exception ed)
             {
-
-                Login.BackgroundColor = Color.Red;
+                
+                //msg_error.Text = ed.Message;
+                //CadastroButton.BackgroundColor = Color.Red;
             }
 
 
